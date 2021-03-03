@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ZGuide</string>
+    <string name="hello_phrase">Hello ZGuide</string>
 </resources>
