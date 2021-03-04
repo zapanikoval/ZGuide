@@ -8,7 +8,7 @@ public class SharedPreferencesRepository {
     public static final String IS_VISITED = SHARED_PREFERENCES_KEY + "_IS_VISITED";
 
 
-    private SharedPreferences mPreferences;
+    private final SharedPreferences mPreferences;
     private static SharedPreferencesRepository instance;
 
     protected SharedPreferencesRepository(SharedPreferences preferences) {

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.e.zguide.repositories.SQLDataBaseRepository;
 import com.e.zguide.repositories.SharedPreferencesRepository;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,5 +15,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferencesRepository.getInstance(this);
+        SQLDataBaseRepository.getInstance(this);
     }
 }
