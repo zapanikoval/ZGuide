@@ -1,13 +1,17 @@
 package com.e.zguide.repositories;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.Nullable;
+
 import com.e.zguide.models.PlaceModel;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public static final String DB_NAME = "Z_GUIDE_DATABASE";
@@ -40,7 +44,8 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                 + PlaceModel.LONG_DESC_KEY + " TEXT, "
                 + PlaceModel.COORDINATES_KEY + " TEXT, "
                 + PlaceModel.IMAGE_URL_KEY + " TEXT, "
-                + PlaceModel.PLACEMENT_KEY + " TEXT);"
+                + PlaceModel.PLACEMENT_KEY + " TEXT, "
+                + PlaceModel.IS_FAVORITE_KEY + " INEGER);"
         );
     }
     @Override
@@ -48,12 +53,51 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
 
     }
 
+    @Nullable
     public ArrayList<PlaceModel> getAllPlaces() {
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.query(PLACES_TABLE, null, null, null, null, null, null);
 
+        ArrayList<PlaceModel> places = preparePlaces(cursor);
+        cursor.close();
+        database.close();
+        return places;
+    };
+    @Nullable
+    public ArrayList<PlaceModel> searchPlaces(String query) {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(
+                PLACES_TABLE,
+                null,
+                "name like ?",
+                new String[] {query},
+                null,
+                null,
+                null
+        );
+
+        ArrayList<PlaceModel> places = preparePlaces(cursor);
+        cursor.close();
+        database.close();
+        return places;
+    };
+
+    public void setFavorite(UUID id, Boolean value) {
+        String stringId = id.toString();
+        ContentValues values = new ContentValues();
+        values.put(PlaceModel.IS_FAVORITE_KEY, value ? 1 : 0);
+
+        SQLiteDatabase database = getWritableDatabase();
+        database.update(PLACES_TABLE, values, PlaceModel.ID_KEY + " = ?", new String[] {stringId});
+        database.close();
+    }
+
+    @Nullable
+    private ArrayList<PlaceModel> preparePlaces(Cursor cursor) {
+        if (cursor == null) return null;
+
+        ArrayList<PlaceModel> places = new ArrayList<>();
         if (cursor.moveToFirst()) {
-            ArrayList<PlaceModel> places = new ArrayList<>();
 
             do {
                 places.add(new PlaceModel(
@@ -63,17 +107,16 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(PlaceModel.LONG_DESC_KEY)),
                         cursor.getString(cursor.getColumnIndex(PlaceModel.COORDINATES_KEY)),
                         cursor.getString(cursor.getColumnIndex(PlaceModel.IMAGE_URL_KEY)),
-                        cursor.getString(cursor.getColumnIndex(PlaceModel.PLACEMENT_KEY))
+                        cursor.getString(cursor.getColumnIndex(PlaceModel.PLACEMENT_KEY)),
+                        cursor.getInt(cursor.getColumnIndex(PlaceModel.IS_FAVORITE_KEY)) == 1
                 ));
             } while (cursor.moveToNext());
+        }
 
-            cursor.close();
-            database.close();
-            return places;
-        } else {
-            cursor.close();
-            database.close();
+        if (places.isEmpty()) {
             return null;
+        } else {
+            return places;
         }
     }
-}
+};
