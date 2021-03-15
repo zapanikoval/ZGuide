@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+import androidx.room.Room;
 
 import com.e.zguide.models.PlaceModel;
 
@@ -17,12 +18,15 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public static final String DB_NAME = "Z_GUIDE_DATABASE";
     public static final String PLACES_TABLE = "PLACES";
 
+    @Deprecated
     private static SQLDataBaseRepository mInstance;
 
+    @Deprecated
     protected SQLDataBaseRepository(Context context) {
         super(context, DB_NAME, null, 1);
     }
 
+    @Deprecated
     public static SQLDataBaseRepository getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new SQLDataBaseRepository(context);
@@ -30,6 +34,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
 
         return mInstance;
     }
+    @Deprecated
     public static SQLDataBaseRepository getInstance() {
         return mInstance;
     }
@@ -53,6 +58,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
 
     }
 
+    @Deprecated
     @Nullable
     public ArrayList<PlaceModel> getAllPlaces() {
         SQLiteDatabase database = getReadableDatabase();
@@ -63,6 +69,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         database.close();
         return places;
     };
+    @Deprecated
     @Nullable
     public ArrayList<PlaceModel> searchPlaces(String query) {
         SQLiteDatabase database = getReadableDatabase();
@@ -82,6 +89,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         return places;
     };
 
+    @Deprecated
     public void setFavorite(UUID id, Boolean value) {
         String stringId = id.toString();
         ContentValues values = new ContentValues();
@@ -92,6 +100,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         database.close();
     }
 
+    @Deprecated
     @Nullable
     private ArrayList<PlaceModel> preparePlaces(Cursor cursor) {
         if (cursor == null) return null;
@@ -118,5 +127,19 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         } else {
             return places;
         }
+    }
+
+
+    private static AppDatabase mDatabaseInstance;
+
+    public static AppDatabase getDatabase(Context context) {
+        if (mDatabaseInstance == null) {
+            mDatabaseInstance = Room.databaseBuilder(context, AppDatabase.class, DB_NAME).build();
+        }
+
+        return mDatabaseInstance;
+    }
+    public static AppDatabase getDatabase() {
+        return mDatabaseInstance;
     }
 };

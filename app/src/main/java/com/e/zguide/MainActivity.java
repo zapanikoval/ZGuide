@@ -9,6 +9,7 @@ import com.e.zguide.repositories.SharedPreferencesRepository;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO: 15.03.21 ADD APPLICATION AND INITIALIZE ALL REPOSITORIES FROM APPLICATION
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,5 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferencesRepository.getInstance(this);
         SQLDataBaseRepository.getInstance(this);
+        SQLDataBaseRepository.getDatabase(this);
     }
 }

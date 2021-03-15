@@ -1,5 +1,7 @@
 package com.e.zguide.models;
 
+import com.e.zguide.repositories.AppDatabase;
+
 import java.util.UUID;
 
 public class PlaceModel {
@@ -33,6 +35,25 @@ public class PlaceModel {
             this.isFavorite = false;
         } else {
             this.isFavorite = isFavorite;
+        }
+    }
+    public PlaceModel(AppDatabase.Place place) {
+        if (id == null) {
+            this.id = UUID.randomUUID();
+        } else {
+            this.id = UUID.fromString(place.id);
+        }
+        this.name = place.name;
+        this.shortDescription = place.shortDescription;
+        this.longDescription = place.longDescription;
+        this.coordinates = place.coordinates;
+        this.imageUrl = place.imageUrl;
+        this.placement = place.placement;
+
+        if (isFavorite == null) {
+            this.isFavorite = false;
+        } else {
+            this.isFavorite = place.isFavorite;
         }
     }
 
