@@ -16,11 +16,12 @@ import java.util.UUID;
 public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public static final String DB_NAME = "Z_GUIDE_DATABASE";
     public static final String PLACES_TABLE = "PLACES";
+    private static final int DB_VERSION = 1;
 
     private static SQLDataBaseRepository mInstance;
 
     protected SQLDataBaseRepository(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     public static SQLDataBaseRepository getInstance(Context context) {
