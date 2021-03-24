@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_first_step" >
         <action
             android:id="@+id/action_firstStep_to_secondStep"
-            app:destination="@id/secondStep" />
+            app:destination="@id/secondStep"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/secondStep"
@@ -21,7 +25,11 @@
         tools:layout="@layout/fragment_second_step" >
         <action
             android:id="@+id/action_secondStep_to_thirdStep"
-            app:destination="@id/thirdStep" />
+            app:destination="@id/thirdStep"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/thirdStep"
@@ -30,7 +38,11 @@
         tools:layout="@layout/fragment_third_step" >
         <action
             android:id="@+id/action_thirdStep_to_rootActivity"
-            app:destination="@id/rootActivity" />
+            app:destination="@id/rootActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <activity
         android:id="@+id/rootActivity"

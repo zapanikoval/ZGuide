@@ -20,7 +20,7 @@ public class ThirdStep extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentThirdStepBinding binding = FragmentThirdStepBinding.inflate(inflater, container, false);
-        NavController navController = Navigation.findNavController(requireActivity(), R.id.onboarding_nav_host);
+        NavController navController = Navigation.findNavController(container);
 
         binding.btnNextPress.setOnClickListener(v -> {
             //todo clear task

@@ -19,7 +19,7 @@ public class FirstStep extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentFirstStepBinding binding = FragmentFirstStepBinding.inflate(inflater, container, false);
-        NavController navController = Navigation.findNavController(requireActivity(), R.id.onboarding_nav_host);
+        NavController navController = Navigation.findNavController(container);
 
         binding.btnNextPress.setOnClickListener(v -> navController.navigate(R.id.action_firstStep_to_secondStep));
 
