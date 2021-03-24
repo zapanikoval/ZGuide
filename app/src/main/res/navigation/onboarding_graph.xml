@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/onboarding_graph"
+    app:startDestination="@id/firstStep">
+
+    <fragment
+        android:id="@+id/firstStep"
+        android:name="com.e.zguide.fragments.onboarding.FirstStep"
+        android:label="fragment_first_step"
+        tools:layout="@layout/fragment_first_step" >
+        <action
+            android:id="@+id/action_firstStep_to_secondStep"
+            app:destination="@id/secondStep" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondStep"
+        android:name="com.e.zguide.fragments.onboarding.SecondStep"
+        android:label="fragment_second_step"
+        tools:layout="@layout/fragment_second_step" >
+        <action
+            android:id="@+id/action_secondStep_to_thirdStep"
+            app:destination="@id/thirdStep" />
+    </fragment>
+    <fragment
+        android:id="@+id/thirdStep"
+        android:name="com.e.zguide.fragments.onboarding.ThirdStep"
+        android:label="fragment_third_step"
+        tools:layout="@layout/fragment_third_step" >
+        <action
+            android:id="@+id/action_thirdStep_to_rootActivity"
+            app:destination="@id/rootActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/rootActivity"
+        android:name="com.e.zguide.activities.RootActivity"
+        android:label="activity_root"
+        tools:layout="@layout/activity_root" />
+</navigation>
