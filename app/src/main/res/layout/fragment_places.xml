@@ -17,22 +17,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnGoToFavorites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Favorites"
-        app:layout_constraintEnd_toStartOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-    <Button
-        android:id="@+id/btnGoToSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
