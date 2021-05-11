@@ -1,22 +1,23 @@
-package com.e.zguide;
+package com.e.zguide.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
-import com.e.zguide.activities.OnboardingActivity;
-import com.e.zguide.activities.RootActivity;
+import com.e.zguide.R;
 import com.e.zguide.repositories.SQLDataBaseRepository;
 import com.e.zguide.repositories.SharedPreferencesRepository;
 
-public class MainActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash_screen);
+        getSupportActionBar().hide();
+
         SQLDataBaseRepository.getInstance(this);
 
         boolean isVisited = SharedPreferencesRepository.getInstance(this).getIsVisited();
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        startActivity(intent);
+        new Handler().postDelayed(() -> {
+            startActivity(intent);
+            finish();
+        }, 2000);
     }
 }
