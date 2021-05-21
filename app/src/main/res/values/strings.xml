@@ -6,4 +6,9 @@
     <string name="placesTitle">Места</string>
     <string name="favoritesTitle">Избранное</string>
     <string name="searchTitle">Поиск</string>
+    <string name="onboarding_first_step">Находите новые увлекательные места либо освежайте знания о старых любимых заведениях!</string>
+    <string name="onboarding_second_step">Найдите место для отдыха в рекомендациях и сохраните его!</string>
+    <string name="onboarding_button">Далее</string>
+    <string name="onboarding_finish_button">Вперед!</string>
+    <string name="onboarding_third_step">Радуйте себя и своих близких новыми местами в любимом городе!</string>
 </resources>
