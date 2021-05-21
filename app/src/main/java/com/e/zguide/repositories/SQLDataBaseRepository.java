@@ -5,12 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import com.e.zguide.helpers.Utils;
 import com.e.zguide.models.PlaceModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SQLDataBaseRepository extends SQLiteOpenHelper {
@@ -19,9 +26,11 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
 
     private static SQLDataBaseRepository mInstance;
+    private Context mContext;
 
     protected SQLDataBaseRepository(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.mContext = context;
     }
 
     public static SQLDataBaseRepository getInstance(Context context) {
@@ -35,6 +44,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         return mInstance;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
@@ -45,9 +55,10 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                 + PlaceModel.LONG_DESC_KEY + " TEXT, "
                 + PlaceModel.COORDINATES_KEY + " TEXT, "
                 + PlaceModel.IMAGE_URL_KEY + " TEXT, "
-                + PlaceModel.PLACEMENT_KEY + " TEXT, "
-                + PlaceModel.IS_FAVORITE_KEY + " INEGER);"
+                + PlaceModel.IS_FAVORITE_KEY + " INTEGER);"
         );
+
+        this.seedDatabase(sqLiteDatabase);
     }
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
@@ -108,7 +119,6 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(PlaceModel.LONG_DESC_KEY)),
                         cursor.getString(cursor.getColumnIndex(PlaceModel.COORDINATES_KEY)),
                         cursor.getString(cursor.getColumnIndex(PlaceModel.IMAGE_URL_KEY)),
-                        cursor.getString(cursor.getColumnIndex(PlaceModel.PLACEMENT_KEY)),
                         cursor.getInt(cursor.getColumnIndex(PlaceModel.IS_FAVORITE_KEY)) == 1
                 ));
             } while (cursor.moveToNext());
@@ -119,5 +129,29 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         } else {
             return places;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void seedDatabase(SQLiteDatabase database) {
+        String jsonString = Utils.getJsonFromAssets(mContext, "data.json");
+
+        Gson gson = new Gson();
+        Type listPlacesType = new TypeToken<List<PlaceModel>>() {}.getType();
+
+        List<PlaceModel> places = gson.fromJson(jsonString, listPlacesType);
+
+        places.forEach((place) -> {
+            ContentValues values = new ContentValues();
+
+            values.put(PlaceModel.ID_KEY, place.getId().toString());
+            values.put(PlaceModel.NAME_KEY, place.getName());
+            values.put(PlaceModel.SHORT_DESC_KEY, place.getShortDescription());
+            values.put(PlaceModel.LONG_DESC_KEY, place.getLongDescription());
+            values.put(PlaceModel.COORDINATES_KEY, place.getCoordinates());
+            values.put(PlaceModel.IMAGE_URL_KEY, place.getImageUrl());
+            values.put(PlaceModel.IS_FAVORITE_KEY, place.getFavorite() ? 1 : 0);
+
+            database.insert(PLACES_TABLE, null, values);
+        });
     }
 };

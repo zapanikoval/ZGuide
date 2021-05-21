@@ -9,14 +9,13 @@ public class PlaceModel {
     public static final String LONG_DESC_KEY = "longDescription";
     public static final String COORDINATES_KEY = "coordinates";
     public static final String IMAGE_URL_KEY = "imageUrl";
-    public static final String PLACEMENT_KEY = "placement";
     public static final String IS_FAVORITE_KEY = "isFavorite";
 
     private UUID id;
-    private String name, shortDescription, longDescription, coordinates, imageUrl, placement;
+    private String name, shortDescription, longDescription, coordinates, imageUrl;
     private Boolean isFavorite;
 
-    public PlaceModel(String id, String name, String shortDescription, String longDescription, String coordinates, String imageUrl, String placement, Boolean isFavorite) {
+    public PlaceModel(String id, String name, String shortDescription, String longDescription, String coordinates, String imageUrl, Boolean isFavorite) {
         if (id == null) {
             this.id = UUID.randomUUID();
         } else {
@@ -27,7 +26,6 @@ public class PlaceModel {
         this.longDescription = longDescription;
         this.coordinates = coordinates;
         this.imageUrl = imageUrl;
-        this.placement = placement;
 
         if (isFavorite == null) {
             this.isFavorite = false;
@@ -60,9 +58,6 @@ public class PlaceModel {
         return imageUrl;
     }
 
-    public String getPlacement() {
-        return placement;
-    }
 
     public Boolean getFavorite() {
         return isFavorite;
@@ -86,10 +81,6 @@ public class PlaceModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public void setPlacement(String placement) {
-        this.placement = placement;
     }
 
     public void setFavorite(Boolean favorite) {
