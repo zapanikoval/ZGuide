@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -20,13 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static android.content.ContentValues.TAG;
+
 public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public static final String DB_NAME = "Z_GUIDE_DATABASE";
     public static final String PLACES_TABLE = "PLACES";
     private static final int DB_VERSION = 1;
 
     private static SQLDataBaseRepository mInstance;
-    private Context mContext;
+    private final Context mContext;
 
     protected SQLDataBaseRepository(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -40,6 +43,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
 
         return mInstance;
     }
+
     public static SQLDataBaseRepository getInstance() {
         return mInstance;
     }
@@ -49,17 +53,18 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(
                 "CREATE TABLE " + PLACES_TABLE + " ("
-                + PlaceModel.ID_KEY + " TEXT PRIMARY KEY, "
-                + PlaceModel.NAME_KEY + " TEXT, "
-                + PlaceModel.SHORT_DESC_KEY + " TEXT, "
-                + PlaceModel.LONG_DESC_KEY + " TEXT, "
-                + PlaceModel.COORDINATES_KEY + " TEXT, "
-                + PlaceModel.IMAGE_URL_KEY + " TEXT, "
-                + PlaceModel.IS_FAVORITE_KEY + " INTEGER);"
+                        + PlaceModel.ID_KEY + " TEXT PRIMARY KEY, "
+                        + PlaceModel.NAME_KEY + " TEXT, "
+                        + PlaceModel.SHORT_DESC_KEY + " TEXT, "
+                        + PlaceModel.LONG_DESC_KEY + " TEXT, "
+                        + PlaceModel.COORDINATES_KEY + " TEXT, "
+                        + PlaceModel.IMAGE_URL_KEY + " TEXT, "
+                        + PlaceModel.IS_FAVORITE_KEY + " INTEGER);"
         );
 
         this.seedDatabase(sqLiteDatabase);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
@@ -74,7 +79,19 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         cursor.close();
         database.close();
         return places;
-    };
+    }
+
+    @Nullable
+    public ArrayList<PlaceModel> getFavoritePlaces() {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(PLACES_TABLE, null, PlaceModel.IS_FAVORITE_KEY + "= 1", null, null, null, null);
+
+        ArrayList<PlaceModel> places = preparePlaces(cursor);
+        cursor.close();
+        database.close();
+        return places;
+    }
+
     @Nullable
     public ArrayList<PlaceModel> searchPlaces(String query) {
         SQLiteDatabase database = getReadableDatabase();
@@ -82,7 +99,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                 PLACES_TABLE,
                 null,
                 "name like ?",
-                new String[] {query},
+                new String[]{query},
                 null,
                 null,
                 null
@@ -92,7 +109,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         cursor.close();
         database.close();
         return places;
-    };
+    }
 
     public void setFavorite(UUID id, Boolean value) {
         String stringId = id.toString();
@@ -100,7 +117,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         values.put(PlaceModel.IS_FAVORITE_KEY, value ? 1 : 0);
 
         SQLiteDatabase database = getWritableDatabase();
-        database.update(PLACES_TABLE, values, PlaceModel.ID_KEY + " = ?", new String[] {stringId});
+        database.update(PLACES_TABLE, values, PlaceModel.ID_KEY + " = ?", new String[]{stringId});
         database.close();
     }
 
@@ -136,9 +153,12 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         String jsonString = Utils.getJsonFromAssets(mContext, "data.json");
 
         Gson gson = new Gson();
-        Type listPlacesType = new TypeToken<List<PlaceModel>>() {}.getType();
+        Type listPlacesType = new TypeToken<List<PlaceModel>>() {
+        }.getType();
 
         List<PlaceModel> places = gson.fromJson(jsonString, listPlacesType);
+
+        Log.d(TAG, "seedDatabase: " + places);
 
         places.forEach((place) -> {
             ContentValues values = new ContentValues();
@@ -149,9 +169,9 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
             values.put(PlaceModel.LONG_DESC_KEY, place.getLongDescription());
             values.put(PlaceModel.COORDINATES_KEY, place.getCoordinates());
             values.put(PlaceModel.IMAGE_URL_KEY, place.getImageUrl());
-            values.put(PlaceModel.IS_FAVORITE_KEY, place.getFavorite() ? 1 : 0);
+            values.put(PlaceModel.IS_FAVORITE_KEY, 0);
 
             database.insert(PLACES_TABLE, null, values);
         });
     }
-};
+}
