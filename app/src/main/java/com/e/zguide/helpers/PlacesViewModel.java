@@ -10,17 +10,30 @@ import com.e.zguide.repositories.SQLDataBaseRepository;
 import java.util.ArrayList;
 
 public class PlacesViewModel extends ViewModel {
-    MutableLiveData<ArrayList<PlaceModel>> placesList;
-    MutableLiveData<ArrayList<PlaceModel>> searchPlaces;
-    MutableLiveData<ArrayList<PlaceModel>> favoritePlaces;
-    MutableLiveData<PlaceModel> selectedPlace;
+    private MutableLiveData<ArrayList<PlaceModel>> placesList;
+    private MutableLiveData<ArrayList<PlaceModel>> searchPlaces;
+    private MutableLiveData<ArrayList<PlaceModel>> favoritePlaces;
+    private MutableLiveData<PlaceModel> selectedPlace = new MutableLiveData<>();
 
     public LiveData<ArrayList<PlaceModel>> getPlaces() {
         return placesList;
     }
-
     public LiveData<ArrayList<PlaceModel>> getFavoritePlaces() {
         return favoritePlaces;
+    }
+    public LiveData<PlaceModel> getSelectedPlace() {
+        return selectedPlace;
+    }
+
+    public void setSelectedPlace(PlaceModel selectedPlace) {
+        this.selectedPlace.setValue(selectedPlace);
+    }
+    public void setSelectedPlaceAsFavorite() {
+        PlaceModel place = selectedPlace.getValue();
+        place.setFavorite(!place.getFavorite());
+        SQLDataBaseRepository.getInstance().setFavorite(place.getId(), place.getFavorite());
+
+        selectedPlace.setValue(place);
     }
 
     public PlacesViewModel() {
@@ -28,13 +41,11 @@ public class PlacesViewModel extends ViewModel {
         loadPlaces();
         loadFavoritePlaces();
     }
-
     private void loadPlaces() {
         ArrayList<PlaceModel> placeModels = SQLDataBaseRepository.getInstance().getAllPlaces();
         placesList = new MutableLiveData<>();
         placesList.setValue(placeModels);
     }
-
     private void loadFavoritePlaces() {
         ArrayList<PlaceModel> favoritePlaces = SQLDataBaseRepository.getInstance().getFavoritePlaces();
         this.favoritePlaces = new MutableLiveData<>();

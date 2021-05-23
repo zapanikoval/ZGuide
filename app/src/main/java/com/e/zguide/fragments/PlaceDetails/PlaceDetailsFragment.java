@@ -1,66 +1,62 @@
 package com.e.zguide.fragments.PlaceDetails;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.e.zguide.R;
+import com.e.zguide.activities.RootActivity;
+import com.e.zguide.databinding.FragmentPlaceDetailsBinding;
+import com.e.zguide.helpers.PlacesViewModel;
+import com.e.zguide.models.PlaceModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PlaceDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PlaceDetailsFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public PlaceDetailsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PlaceDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PlaceDetailsFragment newInstance(String param1, String param2) {
-        PlaceDetailsFragment fragment = new PlaceDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    FragmentPlaceDetailsBinding binding;
+    PlacesViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        viewModel = new ViewModelProvider(getActivity()).get(PlacesViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_place_details, container, false);
+        binding = FragmentPlaceDetailsBinding.inflate(inflater, container, false);
+
+        viewModel.getSelectedPlace().observe(getViewLifecycleOwner(), (place) -> {
+            ((RootActivity) getActivity()).getSupportActionBar().setTitle(place.getName());
+            Glide.with(this).load(place.getImageUrl()).into(binding.placeImage);
+            binding.placeName.setText(place.getName());
+            binding.longDescription.setText(place.getLongDescription());
+
+            if (place.getFavorite()) {
+                binding.makeFavoriteBtn.setColorFilter(ContextCompat.getColor(getContext(), R.color.red));
+            } else {
+                binding.makeFavoriteBtn.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+            }
+        });
+
+        binding.makeFavoriteBtn.setOnClickListener((view) -> {
+            viewModel.setSelectedPlaceAsFavorite();
+        });
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

@@ -53,6 +53,7 @@ public class PlacesFragment extends Fragment implements IOnPlacePressCallback {
 
     @Override
     public void onPlaceClick(PlaceModel place, int position) {
-
+        viewModel.setSelectedPlace(place);
+        navController.navigate(R.id.action_placesFragment_to_placeDetailsFragment);
     }
 }

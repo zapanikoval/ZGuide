@@ -11,4 +11,6 @@
     <string name="onboarding_button">Далее</string>
     <string name="onboarding_finish_button">Вперед!</string>
     <string name="onboarding_third_step">Радуйте себя и своих близких новыми местами в любимом городе!</string>
+    <string name="place_details_map_btn">Открыть на карте</string>
+    <string name="favorite_button">Избранное</string>
 </resources>
