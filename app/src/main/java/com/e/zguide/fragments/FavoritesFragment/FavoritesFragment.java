@@ -1,6 +1,9 @@
 package com.e.zguide.fragments.FavoritesFragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,19 +12,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.e.zguide.R;
 import com.e.zguide.databinding.FragmentFavoritesBinding;
 import com.e.zguide.helpers.IOnPlacePressCallback;
 import com.e.zguide.helpers.PlaceProvider;
 import com.e.zguide.helpers.PlacesViewModel;
 import com.e.zguide.models.PlaceModel;
-
-import java.util.Objects;
 
 public class FavoritesFragment extends Fragment implements IOnPlacePressCallback {
     FragmentFavoritesBinding binding;
@@ -46,7 +42,6 @@ public class FavoritesFragment extends Fragment implements IOnPlacePressCallback
         binding.placesRecyclerView.setAdapter(provider);
 
         viewModel.getFavoritePlaces().observe(getViewLifecycleOwner(), (places) -> {
-            Log.d("OBSERVE FAVORITE PLACES", places.toString());
             provider.setPlaces(places);
         });
 

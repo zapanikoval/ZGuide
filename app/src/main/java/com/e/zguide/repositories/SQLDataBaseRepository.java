@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -20,8 +19,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static android.content.ContentValues.TAG;
 
 public class SQLDataBaseRepository extends SQLiteOpenHelper {
     public static final String DB_NAME = "Z_GUIDE_DATABASE";
@@ -99,7 +96,7 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
                 PLACES_TABLE,
                 null,
                 "name like ?",
-                new String[]{query},
+                new String[]{"%" + query + "%"},
                 null,
                 null,
                 null
@@ -157,8 +154,6 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
         }.getType();
 
         List<PlaceModel> places = gson.fromJson(jsonString, listPlacesType);
-
-        Log.d(TAG, "seedDatabase: " + places);
 
         places.forEach((place) -> {
             ContentValues values = new ContentValues();

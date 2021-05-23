@@ -1,10 +1,10 @@
 package com.e.zguide.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.e.zguide.R;
 import com.e.zguide.repositories.SQLDataBaseRepository;

@@ -42,6 +42,10 @@ public class PlaceProvider extends RecyclerView.Adapter<PlaceProvider.ViewHolder
 
     @Override
     public int getItemCount() {
+        if (placeModels == null || placeModels.isEmpty()) {
+            return 0;
+        }
+
         return placeModels.size();
     }
 
