@@ -1,5 +1,7 @@
 package com.e.zguide.helpers;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -29,11 +31,21 @@ public class PlacesViewModel extends ViewModel {
         this.selectedPlace.setValue(selectedPlace);
     }
     public void setSelectedPlaceAsFavorite() {
+        ArrayList<PlaceModel> oldFavorites = favoritePlaces.getValue();
         PlaceModel place = selectedPlace.getValue();
+        int updatedIndex = oldFavorites.indexOf(place);
+
+        if (updatedIndex == -1) {
+            oldFavorites.add(place);
+        } else {
+            oldFavorites.remove(updatedIndex);
+        }
+
         place.setFavorite(!place.getFavorite());
         SQLDataBaseRepository.getInstance().setFavorite(place.getId(), place.getFavorite());
 
         selectedPlace.setValue(place);
+        favoritePlaces.setValue(oldFavorites);
     }
 
     public PlacesViewModel() {

@@ -13,7 +13,7 @@ import com.e.zguide.models.PlaceModel;
 import java.util.ArrayList;
 
 public class PlaceProvider extends RecyclerView.Adapter<PlaceProvider.ViewHolder> {
-    public ArrayList<PlaceModel> placeModels;
+    private ArrayList<PlaceModel> placeModels;
     private final IOnPlacePressCallback callbackOwner;
 
     public PlaceProvider(IOnPlacePressCallback onPlacePressCallback, ArrayList<PlaceModel> placeModelArrayList) {
@@ -43,6 +43,11 @@ public class PlaceProvider extends RecyclerView.Adapter<PlaceProvider.ViewHolder
     @Override
     public int getItemCount() {
         return placeModels.size();
+    }
+
+    public void setPlaces(ArrayList<PlaceModel> newPlaces) {
+        this.placeModels = newPlaces;
+        notifyDataSetChanged();
     }
 
 
