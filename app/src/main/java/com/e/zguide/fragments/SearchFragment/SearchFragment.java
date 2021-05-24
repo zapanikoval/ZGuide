@@ -1,7 +1,9 @@
 package com.e.zguide.fragments.SearchFragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
@@ -43,7 +45,12 @@ public class SearchFragment extends Fragment implements IOnPlacePressCallback {
         binding.placesRecyclerView.setAdapter(placesProvider);
 
         viewModel.getSearchedPlaces().observe(getViewLifecycleOwner(), (places) -> {
-            placesProvider.setPlaces(places);
+            if (places == null || places.isEmpty()) {
+                showEmptyView();
+            } else {
+                placesProvider.setPlaces(places);
+                showRecyclerView();
+            }
         });
 
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -72,5 +79,15 @@ public class SearchFragment extends Fragment implements IOnPlacePressCallback {
     public void onPlaceClick(PlaceModel place, int position) {
         viewModel.setSelectedPlace(place);
         navController.navigate(R.id.action_searchFragment_to_placeDetailsFragment);
+    }
+
+    private void showRecyclerView() {
+        binding.emptyText.setVisibility(View.GONE);
+        binding.placesRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmptyView() {
+        binding.emptyText.setVisibility(View.VISIBLE);
+        binding.placesRecyclerView.setVisibility(View.GONE);
     }
 }

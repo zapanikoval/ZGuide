@@ -42,7 +42,12 @@ public class FavoritesFragment extends Fragment implements IOnPlacePressCallback
         binding.placesRecyclerView.setAdapter(provider);
 
         viewModel.getFavoritePlaces().observe(getViewLifecycleOwner(), (places) -> {
-            provider.setPlaces(places);
+            if (places == null || places.isEmpty()) {
+                showEmptyView();
+            } else {
+                provider.setPlaces(places);
+                showRecyclerView();
+            }
         });
 
         return binding.getRoot();
@@ -58,5 +63,16 @@ public class FavoritesFragment extends Fragment implements IOnPlacePressCallback
     public void onPlaceClick(PlaceModel place, int position) {
         viewModel.setSelectedPlace(place);
         navController.navigate(R.id.action_favoritesFragment_to_placeDetailsFragment);
+    }
+
+
+    private void showRecyclerView() {
+        binding.emptyText.setVisibility(View.GONE);
+        binding.placesRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showEmptyView() {
+        binding.emptyText.setVisibility(View.VISIBLE);
+        binding.placesRecyclerView.setVisibility(View.GONE);
     }
 }

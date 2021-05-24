@@ -77,6 +77,12 @@ public class PlacesViewModel extends ViewModel {
     private void loadFavoritePlaces() {
         ArrayList<PlaceModel> favoritePlaces = SQLDataBaseRepository.getInstance().getFavoritePlaces();
         this.favoritePlaces = new MutableLiveData<>();
-        this.favoritePlaces.setValue(favoritePlaces);
+
+        if (favoritePlaces == null) {
+            this.favoritePlaces.setValue(new ArrayList<>());
+        } else {
+            this.favoritePlaces.setValue(favoritePlaces);
+        }
+
     }
 }
