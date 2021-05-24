@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.e.zguide.R;
 import com.e.zguide.databinding.ListItemBinding;
 import com.e.zguide.models.PlaceModel;
 
@@ -31,7 +32,7 @@ public class PlaceProvider extends RecyclerView.Adapter<PlaceProvider.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PlaceModel place = placeModels.get(position);
 
-        Glide.with(holder.binding.getRoot()).load(place.getImageUrl()).into(holder.binding.placeImage);
+        Glide.with(holder.binding.getRoot()).load(place.getImageUrl()).placeholder(R.drawable.placeholder).into(holder.binding.placeImage);
 
         holder.binding.placeName.setText(place.getName());
         holder.binding.placeShortDescription.setText(place.getShortDescription());

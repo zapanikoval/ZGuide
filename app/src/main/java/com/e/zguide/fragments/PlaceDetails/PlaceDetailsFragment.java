@@ -40,7 +40,7 @@ public class PlaceDetailsFragment extends Fragment {
 
         viewModel.getSelectedPlace().observe(getViewLifecycleOwner(), (place) -> {
             ((RootActivity) getActivity()).getSupportActionBar().setTitle(place.getName());
-            Glide.with(this).load(place.getImageUrl()).into(binding.placeImage);
+            Glide.with(this).load(place.getImageUrl()).placeholder(R.drawable.placeholder).into(binding.placeImage);
             binding.placeName.setText(place.getName());
             binding.longDescription.setText(place.getLongDescription());
 
