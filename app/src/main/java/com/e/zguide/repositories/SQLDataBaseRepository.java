@@ -91,6 +91,10 @@ public class SQLDataBaseRepository extends SQLiteOpenHelper {
 
     @Nullable
     public ArrayList<PlaceModel> searchPlaces(String query) {
+        if (query.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.query(
                 PLACES_TABLE,
