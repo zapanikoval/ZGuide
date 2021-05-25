@@ -34,11 +34,14 @@
                 app:layout_constraintGuide_begin="210dp" />
 
             <TextView
+                android:textIsSelectable="true"
                 android:id="@+id/placeName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="TextView"
+                android:textFontWeight="900"
+                android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/placeImage" />
@@ -70,9 +73,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="177dp" />
+                app:layout_constraintGuide_begin="129dp" />
 
             <TextView
+                android:linksClickable="true"
+                android:textIsSelectable="true"
                 android:id="@+id/longDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
