@@ -31,7 +31,7 @@ public class SharedPreferencesRepository {
         return mPreferences.getBoolean(IS_VISITED, false);
     }
 
-    public boolean setIsVisited(Boolean value) {
-        return mPreferences.edit().putBoolean(IS_VISITED, value).commit();
+    public void setIsVisited(Boolean value) {
+        mPreferences.edit().putBoolean(IS_VISITED, value).apply();
     }
 }
